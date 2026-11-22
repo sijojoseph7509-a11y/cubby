@@ -1,0 +1,137 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<meta name="theme-color" content="#F4F2EC"><meta name="apple-mobile-web-app-capable" content="yes"><title>Cubby · Book a Cubby</title><meta name="description" content="Scan, book and open a Cubby for your helmet. No app to download."><link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="icon.png">
+<style>
+:root{--ink:#0B0B0C;--ink2:#18181A;--cream:#F4F2EC;--lime:#CCFF00;--grey:#484844;--mute:#8C8C86;--line:#E4E1D8;
+--disp:Sora,ui-rounded,-apple-system,"SF Pro Display",system-ui,sans-serif;--body:"DM Sans",-apple-system,"SF Pro Text",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--cream)}
+body{font:16px/1.4 var(--body);color:var(--ink);-webkit-font-smoothing:antialiased;-webkit-user-select:none;user-select:none;overflow:hidden}
+.scr{position:fixed;inset:0;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 16px) 20px calc(env(safe-area-inset-bottom) + 20px);
+ opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .22s ease,transform .22s ease;max-width:480px;margin:0 auto}
+.scr.on{opacity:1;pointer-events:auto;transform:none}
+.dk{background:var(--ink);color:var(--cream)}.lt{background:var(--cream)}
+.body{flex:1;display:flex;flex-direction:column;min-height:0}
+.foot{flex:none;padding-top:16px}
+h1{font:500 34px/1.06 var(--disp);letter-spacing:-.035em}
+.eyebrow{font:500 13px/1 var(--body);letter-spacing:.02em;color:var(--mute)}
+.top{display:flex;align-items:center;justify-content:space-between;height:44px}
+.av{width:40px;height:40px;border-radius:50%;background:var(--ink);color:var(--lime);display:grid;place-items:center;font:600 15px var(--disp)}
+.iconbtn{width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.08);color:inherit;display:grid;place-items:center}
+.lt .iconbtn{background:#fff}
+.card{border-radius:28px;padding:22px}
+.hero{background:var(--ink);color:var(--cream);margin-top:18px}
+.chip{display:inline-flex;align-items:center;height:30px;padding:0 12px;border-radius:99px;background:var(--lime);color:var(--ink);font:600 14px var(--disp);letter-spacing:-.01em}
+.chip.dim{background:rgba(255,255,255,.1);color:var(--cream)}
+.meta{display:flex;gap:18px;margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.1)}
+.meta div{flex:1}.meta b{display:block;font:500 17px var(--disp);margin-top:4px}
+.row{display:flex;align-items:center;gap:14px;background:#fff;border-radius:22px;padding:16px 18px;margin-top:12px}
+.ic{width:44px;height:44px;border-radius:14px;background:var(--ink);color:var(--lime);display:grid;place-items:center;flex:none}
+.bay{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-top:12px;background:#fff;border-radius:22px;padding:16px}.bay i{aspect-ratio:1;border-radius:5px;background:#E4E1D8}.bay i.x{background:#3A3A3C}.bay i.me{background:var(--lime);box-shadow:0 0 0 2px var(--ink)}
+.row b{font-weight:600}.row p{font-size:14px;color:var(--mute)}
+.btn{width:100%;height:64px;border:0;border-radius:20px;font:600 18px var(--disp);letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:10px;
+ transition:transform .1s ease,background .2s,opacity .2s;cursor:pointer}
+.btn:active{transform:scale(.98)}.btn[disabled]{opacity:.5}
+.lime{background:var(--lime);color:var(--ink)}.ink{background:var(--ink);color:var(--cream)}
+.ghost{background:none;color:var(--mute);height:48px;font:500 15px var(--body);margin-top:4px}
+.reader{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:240px}
+.pulse{position:relative;width:180px;height:180px;display:grid;place-items:center;margin-bottom:26px}
+.pulse i{position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--lime);opacity:0;animation:p 2.4s infinite cubic-bezier(.2,.6,.3,1)}
+.pulse i:nth-child(2){animation-delay:.8s}.pulse i:nth-child(3){animation-delay:1.6s}
+@keyframes p{0%{transform:scale(.4);opacity:.8}100%{transform:scale(1);opacity:0}}
+.pulse .core{width:84px;height:84px;border-radius:50%;background:var(--lime);color:var(--ink);display:grid;place-items:center;z-index:1}
+.reader h2{font:500 22px/1.2 var(--disp);letter-spacing:-.02em}.reader p{color:var(--mute);margin-top:6px;font-size:15px}
+.ring{position:relative;width:228px;height:228px;margin:auto}
+.ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.ring .n{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .n b{font:300 84px/1 var(--disp);letter-spacing:-.05em;color:var(--lime)}
+.ok{width:56px;height:56px;border-radius:50%;background:var(--lime);color:var(--ink);display:grid;place-items:center}
+.time{font:300 64px/1 var(--disp);letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.live{display:inline-flex;align-items:center;gap:7px;height:28px;padding:0 11px;border-radius:99px;border:1px solid rgba(255,255,255,.18);font-size:13px}
+.live:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lime);animation:b 1.6s infinite}
+@keyframes b{50%{opacity:.25}}
+#net{position:fixed;z-index:20;left:50%;top:calc(env(safe-area-inset-top) + 10px);transform:translate(-50%,-80px);background:#E5484D;color:#fff;border-radius:99px;padding:10px 16px;font:500 14px var(--body);white-space:nowrap;transition:transform .25s}
+#net.show{transform:translate(-50%,0)}
+.sp{width:20px;height:20px;border-radius:50%;border:2.5px solid currentColor;border-right-color:transparent;animation:s .7s linear infinite;display:none}
+@keyframes s{to{transform:rotate(1turn)}}.busy .sp{display:block}.busy .lb{display:none}
+</style></head><body>
+<div id="net">No connection · join Cubby-Demo</div>
+
+<!-- 1 HOME -->
+<section id="home" class="scr lt on"><div class="body">
+ <div class="top"><div><p class="eyebrow">Phoenix MarketCity · B1</p><p style="font:600 17px var(--disp);margin-top:4px">Good evening</p></div><div class="av">S</div></div>
+ <div class="card hero"><div style="display:flex;justify-content:space-between;align-items:center"><span class="chip">B-27</span><span class="chip dim">Free now</span></div>
+  <h1 style="margin-top:30px">Your Cubby<br>is ready.</h1>
+  <div class="meta"><div><p class="eyebrow">Where</p><b>Back wall</b></div><div><p class="eyebrow">Row</p><b>2 · easy reach</b></div></div></div>
+ <div class="row"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8.5a5 5 0 0 1 0 7M9.5 6a9 9 0 0 1 0 12M13 3.5a13 13 0 0 1 0 17"/></svg></div>
+  <div><b>Key ready</b><p>Tap your card or open in the app</p></div></div>
+ <div class="bay"><i class="x"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class="x"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class="x"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class="me"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class="x"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i><i class="x"></i><i class=""></i><i class=""></i></div><p class="eyebrow" style="margin-top:10px;text-align:center">B-27 · back wall, row 2</p>
+</div><div class="foot"><button class="btn ink" onclick="go('tap')"><span>Book B-27</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div></section>
+
+<!-- 2 TAP / OPEN -->
+<section id="tap" class="scr dk"><div class="body">
+ <div class="top"><button class="iconbtn" onclick="go('home')" aria-label="Back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><span class="chip">B-27</span></div>
+ <h1 style="margin-top:22px" id="taph">Open your<br>Cubby.</h1>
+ <div class="reader"><div class="pulse"><i></i><i></i><i></i><div class="core"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 8.5a5 5 0 0 1 0 7M9.5 6a9 9 0 0 1 0 12M13 3.5a13 13 0 0 1 0 17"/></svg></div></div>
+  <h2 id="tapmsg">Tap your card on the reader</h2><p>or open it from your phone</p><a id="live" href="http://192.168.4.1" style="display:none;margin-top:18px;color:#CCFF00;font-size:14px;text-decoration:none;border:1px solid rgba(204,255,0,.4);border-radius:99px;padding:8px 14px">At the Cubby? Join Wi-Fi “Cubby-Demo”, then tap here</a></div>
+</div><div class="foot"><button class="btn lime" id="openBtn" onclick="openNow()"><span class="sp"></span><span class="lb">Open B-27</span></button></div></section>
+
+<!-- 3 OPENING -->
+<section id="open" class="scr dk"><div class="body">
+ <div class="top"><span class="chip">B-27</span><span class="eyebrow" id="via">Opened</span></div>
+ <h1 style="margin-top:22px">B-27 is open.</h1><p style="color:var(--mute);margin-top:10px" id="openmsg">Place your helmet inside and close the door.</p>
+ <div style="flex:1;display:flex;align-items:center"><div class="ring"><svg width="228" height="228"><circle cx="114" cy="114" r="104" stroke="#232325" stroke-width="8" fill="none"/>
+  <circle id="arc" cx="114" cy="114" r="104" stroke="#CCFF00" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="653.5" stroke-dashoffset="0"/></svg>
+  <div class="n"><b id="left">4</b><span class="eyebrow">seconds</span></div></div></div>
+</div></section>
+
+<!-- 4 STORED -->
+<section id="stored" class="scr lt"><div class="body">
+ <div class="top"><div><p class="eyebrow">Phoenix MarketCity · B1</p><p style="font:600 17px var(--disp);margin-top:4px">My Cubby</p></div><div class="av">S</div></div>
+ <div class="card hero"><div style="display:flex;align-items:center;gap:12px"><div class="ok" style="width:40px;height:40px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><span class="eyebrow">Locked · B-27</span></div>
+  <h1 style="margin-top:26px">Your helmet<br>is safe.</h1>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:28px"><div><p class="eyebrow">Stored for</p><div class="time" id="timer" style="margin-top:8px">00:00</div></div><span class="live">Live</span></div></div>
+ <div class="row"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8.5a5 5 0 0 1 0 7M9.5 6a9 9 0 0 1 0 12M13 3.5a13 13 0 0 1 0 17"/></svg></div>
+  <div><b>Collect anytime</b><p>Tap your card, or use the button</p></div></div>
+</div><div class="foot"><button class="btn ink" id="colBtn" onclick="collect()"><span class="sp"></span><span class="lb">Collect helmet</span></button></div></section>
+
+<!-- 5 DONE -->
+<section id="done" class="scr dk"><div class="body" style="justify-content:center">
+ <div class="ok"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+ <h1 style="font-size:44px;margin-top:26px">Ride safe.</h1><p style="color:var(--mute);margin-top:12px;font-size:17px">Strap snug. Every ride.</p>
+ <p class="eyebrow" style="margin-top:34px" id="dur"></p>
+</div><div class="foot"><button class="btn lime" onclick="reset()">Done</button></div></section>
+
+<script>
+const $=i=>document.getElementById(i),OPEN=4000,DEMO=location.hostname!=='192.168.4.1';
+let scr='home',stage='drop',storedAt=0,seen=-1,openUntil=0,busy=false;
+function go(s){document.querySelectorAll('.scr').forEach(e=>e.classList.toggle('on',e.id==s));scr=s;
+ document.querySelector('meta[name=theme-color]').content=$(s).classList.contains('dk')?'#0B0B0C':'#F4F2EC'}
+let fails=0;function net(bad){fails=bad?fails+1:0;$('net').classList.toggle('show',fails>=3)}
+function showOpen(by){openUntil=Date.now()+OPEN;$('via').textContent=by=='CARD'?'Opened with card':'Opened from app';
+ $('openmsg').textContent=stage=='drop'?'Place your helmet inside and close the door.':'Take your helmet and close the door.';go('open');navigator.vibrate&&navigator.vibrate(40)}
+async function req(path,opt={}){ if(DEMO){return {opens:seen+1,open:true,left:OPEN}}
+ const c=new AbortController(),t=setTimeout(()=>c.abort(),2000);
+ try{const r=await fetch(path,{...opt,signal:c.signal,cache:'no-store'});return await r.json()}finally{clearTimeout(t)}}
+async function openNow(){ if(busy)return; busy=true; const b=scr=='stored'?$('colBtn'):$('openBtn'); b.classList.add('busy');
+ showOpen('APP');                                   // instant feedback
+ try{const s=await req('/open',{method:'POST'});seen=s.opens;openUntil=Date.now()+(s.left||OPEN);net(false)}
+ catch(e){net(true);go(stage=='drop'?'tap':'stored')}
+ b.classList.remove('busy');busy=false}
+function collect(){stage='collect';openNow()}
+function reset(){stage='drop';$('tapmsg').textContent='Tap your card on the reader';go('home')}
+function fmt(t){return String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0')}
+function frame(){
+ if(scr=='open'){const l=Math.max(0,openUntil-Date.now());$('left').textContent=Math.ceil(l/1000);$('arc').style.strokeDashoffset=653.5*(1-l/OPEN);
+  if(l<=0){if(stage=='drop'){storedAt=Date.now();go('stored')}else{$('dur').textContent='Stored for '+fmt(Math.floor((Date.now()-storedAt)/1000));go('done')}}}
+ if(scr=='stored')$('timer').textContent=fmt(Math.floor((Date.now()-storedAt)/1000));
+ requestAnimationFrame(frame)}
+let polling=false;
+async function poll(){ if(DEMO||polling)return; polling=true;
+ try{const s=await req('/status');net(false); if(seen<0)seen=s.opens;
+  if(s.opens>seen){seen=s.opens; if(scr!='open'){ if(scr=='stored')stage='collect'; else if(scr=='home'||scr=='done')stage='drop'; showOpen(s.by)} openUntil=Date.now()+s.left}
+  if(s.denied&&scr=='tap')$('tapmsg').textContent='Card not recognised';
+ }catch(e){net(true)} polling=false}
+if(DEMO)document.getElementById('live').style.display='inline-block';
+setInterval(poll,300);poll();requestAnimationFrame(frame);
+</script></body></html>
